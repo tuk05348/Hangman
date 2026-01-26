@@ -11,8 +11,14 @@ namespace HangmanNS
         public const string Third = "|     / \\ ";
         public const string Bottom = "|         \n|_________";
 
+        static Random random  = new Random();
+
         public List<string> WordBank { get; } = new List<string>();
-        private int Guesses { get; set; } = 6;
+        private int GuessesLeft { get; set; } = 6;
+
+        private bool GuessCorrect {  get; set; }
+
+        private List<string> Guesses { get; } = new List<string>();
         public Hangman(string filePath) { 
             StreamReader sr = new StreamReader(filePath);
 
@@ -25,10 +31,15 @@ namespace HangmanNS
             }
         }
 
+        private string SelectWord()
+        {
+            return WordBank[random.Next(WordBank.Count)];
+        }
+
         public void DisplayGallows()
         {
             Console.WriteLine(Top);
-            if(Guesses == 6)
+            if(GuessesLeft == 6)
             {
                 Console.WriteLine(First.Substring(0, 7));
             }
@@ -37,35 +48,80 @@ namespace HangmanNS
                 Console.WriteLine(First);
             }
             
-            if(Guesses == 4)
+            if(GuessesLeft == 4)
             {
                 Console.WriteLine(Second.Substring(0, 7));
             }
-            else if(Guesses == 3)
+            else if(GuessesLeft == 3)
             {
                 Console.WriteLine(Second.Substring(0, 9));
             }
-            else if(Guesses <= 2)
+            else if(GuessesLeft <= 2)
             {
                 Console.WriteLine(Second);
             }
             
 
-            if(Guesses == 1)
+            if(GuessesLeft == 1)
             {
                 Console.WriteLine(Third.Substring(0, 8));
             }
-            else if(Guesses == 0)
+            else if(GuessesLeft == 0)
             {
                 Console.WriteLine(Third);
             }
             Console.WriteLine(Bottom);
         }
 
+        public string UpdateMask(char guess, string mask, string word)
+        {
+
+        }
+
+        public void RunGame()
+        {
+            Console.WriteLine("Welcome to Hangman!");
+            Console.WriteLine("The classic word guessing game");
+
+            string word = SelectWord();
+
+            string mask = new string('*', word.Length);
+
+            while(GuessesLeft > 0)
+            {
+                if(GuessesLeft < 6)
+                {
+                    Console.Write(GuessCorrect ? "That is correct. " : "That is incorrect. ");
+                    Console.WriteLine("You may miss {0} more time(s).", GuessesLeft);
+                    Console.WriteLine(string.Join(", ", Guesses.ToArray()));
+                }
+                DisplayGallows();
+                Console.WriteLine("The word is {0} Enter a guess: ", mask);
+                var currentGuess = Console.ReadLine();
+                
+                while(currentGuess == null)
+                {
+                    Console.WriteLine("Please enter a valid guess: ");
+                    currentGuess = Console.ReadLine();
+                }
+
+                if (word.Contains(currentGuess[0]))
+                {
+                    GuessCorrect = true;
+                    mask = UpdateMask(currentGuess[0], mask, word);
+                }
+                else
+                {
+                    GuessCorrect = false;
+                    GuessesLeft--;
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
             Hangman hangman = new Hangman("HangmanWords.txt");
-            hangman.DisplayGallows();
+            hangman.RunGame();
             Console.ReadLine();
         }
 
