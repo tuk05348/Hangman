@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace HangmanNS
 {
@@ -75,7 +76,23 @@ namespace HangmanNS
 
         public string UpdateMask(char guess, string mask, string word)
         {
+            var foundIndices = new List<int>();
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (guess == word[i])
+                {
+                    foundIndices.Add(i);
+                }
+            }
 
+            StringBuilder sb = new StringBuilder(mask);
+
+            foreach (var item in foundIndices)
+            {
+                sb[item] = guess;
+            }
+
+            return sb.ToString();
         }
 
         public void RunGame()
@@ -96,7 +113,7 @@ namespace HangmanNS
                     Console.WriteLine(string.Join(", ", Guesses.ToArray()));
                 }
                 DisplayGallows();
-                Console.WriteLine("The word is {0} Enter a guess: ", mask);
+                Console.Write("The word is {0} Enter a guess: ", mask);
                 var currentGuess = Console.ReadLine();
                 
                 while(currentGuess == null)
@@ -122,7 +139,6 @@ namespace HangmanNS
         {
             Hangman hangman = new Hangman("HangmanWords.txt");
             hangman.RunGame();
-            Console.ReadLine();
         }
 
     }
