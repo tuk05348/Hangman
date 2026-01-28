@@ -39,16 +39,45 @@ public class Gallows
 
     public void DisplayFirstRow()
     {
-
+        if (GuessesLeft == 6)
+        {
+            Console.WriteLine(First.Substring(0, 7));
+        }
+        else
+        {
+            Console.WriteLine(First);
+        }
     }
 
     public void DisplaySecondRow()
     {
-
+        if (GuessesLeft == 4)
+        {
+            Console.WriteLine(Second.Substring(0, 7));
+        }
+        else if (GuessesLeft == 3)
+        {
+            Console.WriteLine(Second.Substring(0, 9));
+        }
+        else if (GuessesLeft <= 2)
+        {
+            Console.WriteLine(Second);
+        }
     }
 
     public void DisplayThirdRow()
     {
-
+        if (GuessesLeft >= 2)
+        {
+            Console.WriteLine(Third.Substring(0, 6));
+        }
+        else if (GuessesLeft == 1)
+        {
+            Console.WriteLine(Third.Substring(0, 8));
+        }
+        else if (GuessesLeft == 0)
+        {
+            Console.WriteLine(Third);
+        }
     }
 }
