@@ -62,8 +62,11 @@ namespace HangmanNS
                 Console.WriteLine(Second);
             }
             
-
-            if(GuessesLeft == 1)
+            if(GuessesLeft > 2)
+            {
+                Console.WriteLine(Third.Substring(0, 6));
+            }
+            else if(GuessesLeft == 1)
             {
                 Console.WriteLine(Third.Substring(0, 8));
             }
